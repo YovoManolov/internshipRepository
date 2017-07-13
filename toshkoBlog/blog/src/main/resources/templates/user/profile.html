@@ -1,0 +1,46 @@
+<main>
+    <div class="container body-container">
+        <table class="tab" align="center" width="70%">
+            <tr style="background-color: #272b30">
+                <th width="35%"></th>
+                <th width="20%" style="text-align: center"><span th:text="${user.fullName}"></span></th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>
+                    Email: <span th:text="${user.email}"></span>
+                    <br/>
+                    Hobby: <span th:text="${user.hobby}"></span><br/>
+                    Gender: <span th:text="${user.gender}"></span><br/>
+                </td>
+                <td>
+                    <p style="text-align: center;">
+                        <img th:if="${user.hasPicture()}"  th:src="@{'data:image/jpeg;base64,'+${encodeToString}}"
+                             width="100" height="100"/>
+                        <img th:if="${!user.hasPicture()}" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                             width="100" height="100"/>
+                    </p>
+                </td>
+
+                <td style="text-align: center">
+                    <p>
+                        <form th:action="@{/user/{id}/articles (id=${user.id})}">
+                            <input class="btn-lele" type="submit" value="Articles" />
+                        </form>
+                    </p>
+                    <!--<button class="btn-lele" value="Articles"></button><a th:href="@{/user/{id}/articles (id=${user.id})}">-->
+                <!--</a>-->
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</main>
+
+<!--<div class="row">-->
+<!--<div id="main" class="col-sm-9">-->
+<!--<div>-->
+
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->

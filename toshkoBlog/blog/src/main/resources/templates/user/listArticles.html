@@ -1,0 +1,9 @@
+<main>
+    <div th:each="article:${articles}">
+        <div class="col-md-6">
+        Author: <p th:text="${article.author.getFullName()}"></p>
+        Title: <p th:text="${article.title}"></p>
+        Content: <p th:text="${article.getSummary()}"></p>
+        </div>
+    </div>
+</main>

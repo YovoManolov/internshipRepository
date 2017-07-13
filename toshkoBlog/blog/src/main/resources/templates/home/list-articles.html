@@ -1,0 +1,140 @@
+<main>
+    <div class="container body-content">
+        <div class="container">
+            <div class="row">
+                <th:block th:each="article : ${articles}">
+                    <article class="col-md-6">
+                        <figure class="col-lg-12" th:if="${article.articleHasPicture()}">
+                            <!--<img src="https://www.wired.com/wp-content/themes/Phoenix/assets/images/article-icon.jpg" />-->
+                            <img  th:src="@{'data:image/jpeg;base64,'+${article.getArticleImgString()}}" width="520" height="250"/>
+                            <figcaption class="article-caption">
+                                <h2>
+                                    <a th:text="${article.title}" th:href="@{/article/{id}(id=${article.id})}"></a>
+                                </h2>
+                                <h5 style="font-size:22px; color: #79fffd"  th:text="${article.author.fullName}"></h5>
+                            </figcaption>
+                        </figure>
+
+                    <figure class="col-lg-12" th:if="${!article.articleHasPicture()}">
+                        <img src="http://miriadna.com/desctopwalls/images/max/The-plain.jpg" width="520" height="250"/>
+                        <figcaption class="article-caption"><h2>
+                            <a th:text="${article.title}" th:href="@{/article/{id}(id=${article.id})}"></a></h2>
+                               <b> <h5 style="font-size:22px; color: #79fffd"  th:text="${article.author.fullName}"></h5></b>
+                            </figcaption>
+
+                    </figure>
+                    <div class="article-intro col-lg-12" style="padding-top: 10px;">
+                        <strong th:text="${article.summary}"></strong>
+                        <p>
+                            <a class="btn btn-default btn-xs" th:each="tag:${article.tags}"
+                               th:href="@{/tag/{name}(name=${tag.name})}" th:text="${tag.name}"></a>
+                        </p>
+                    </div>
+                </article>
+                </th:block>
+            </div>
+
+
+                <div class="row" style="display: inline-block">
+                    <br/>
+                    <ul class="pagination">
+                        <form  th:action="@{'/category/' + ${category.id} + '/page/' + ${currentPage +1} + '/size/2/prev'}"
+                               method="post" style="display: inline; vertical-align: inherit; font-size: 20px; text-align: left">
+                            <input class="btn btn-default" th:if="${pageIndex &gt; 1}"  type="submit"
+                                   name="pageIndex" id="pageIndex" value="Prev"/>
+                        </form>
+
+                        <ul class="pagination" style="vertical-align:inherit;">
+                            <li  th:each="pageNo : ${#numbers.sequence(5*pageIndex - 5, 5*pageIndex -1)}"
+                                 th:class="${currentPage eq pageNo + 1}? 'active' : ''">
+                                <a th:if="${currentPage != pageNo + 1 and allPages > pageNo }"
+                                   th:href="@{'/category/' + ${category.id} + '/page/' + ${pageNo + 1} + '/size/2'}">
+                                    <span th:text="${pageNo + 1}"></span>
+                                </a>
+                                <a th:if="${currentPage eq pageNo + 1}" href="javascript:void(0);">
+                                    <span th:text="${pageNo + 1}"></span>
+                                </a>
+                            </li>
+                            <text> &nbsp; </text>
+
+                            <form class="form-horizontal" th:action="@{'/category/' + ${category.id} + '/page/'
+                    + ${currentPage + 1} + '/size/2'}"
+                                  method="post" style="display: inline; vertical-align: inherit; font-size: 20px;" >
+                                <input th:if="${pageIndex &lt; allPages / 5  }" value="Next"
+                                       class="btn btn-default" type="submit" name="pageIndex" id="pageIndex"/>
+                            </form>
+                        </ul>
+                    </ul>
+
+
+    </div>
+        </div>
+
+
+        <!--<h1>Category - <th:block th:text="${category.name}"></th:block></h1>-->
+        <!--<div class="row">-->
+            <!--<th:block th:each="article : ${articles}">-->
+                <!--<div class="col-md-6">-->
+                    <!--<article>-->
+                        <!--<header>-->
+                            <!--<h2>-->
+                                <!--<a th:text="${article.title}" th:href="@{/article/{id}(id=${article.id})}">-->
+                                <!--</a>-->
+                            <!--</h2>-->
+                        <!--</header>-->
+
+                        <!--<p th:text="${article.summary}"></p>-->
+                        <!--<small class="author" th:text="${article.author.fullName}"></small>-->
+                        <!--<p>-->
+                            <!--<a class="btn btn-default btn-xs" th:each="tag:${article.tags}"-->
+                               <!--th:href="@{/tag/{name}(name=${tag.name})}" th:text="${tag.name}"></a>-->
+                        <!--</p>-->
+
+
+                        <!--<footer>-->
+                            <!--<div class="pull-right">-->
+                                <!--<a class="btn btn-default btn-xs"-->
+                                   <!--th:href="@{/article/{id}(id=${article.id})}">Read more &raquo;</a>-->
+                            <!--</div>-->
+                        <!--</footer>-->
+                    <!--</article>-->
+                <!--</div>-->
+            <!--</th:block>-->
+        <!--</div>-->
+        <!--<div class="row">-->
+
+
+            <!--<ul class="pagination">-->
+
+                <!--<form  th:action="@{'/category/' + ${category.id} + '/page/' + ${currentPage +1} + '/size/2/prev'}"-->
+                       <!--method="post" style="display: inline; vertical-align: inherit; font-size: 20px; text-align: left">-->
+                    <!--<input class="btn btn-default" th:if="${pageIndex &gt; 1}"  type="submit"-->
+                           <!--name="pageIndex" id="pageIndex" value="Prev"/>-->
+                <!--</form>-->
+
+                <!--<ul class="pagination" style="vertical-align:inherit;">-->
+                    <!--<li  th:each="pageNo : ${#numbers.sequence(5*pageIndex - 5, 5*pageIndex -1)}"-->
+                        <!--th:class="${currentPage eq pageNo + 1}? 'active' : ''">-->
+                        <!--<a th:if="${currentPage != pageNo + 1 and allPages > pageNo }"-->
+                        <!--th:href="@{'/category/' + ${category.id} + '/page/' + ${pageNo + 1} + '/size/2'}">-->
+                            <!--<span th:text="${pageNo + 1}"></span>-->
+                        <!--</a>-->
+                        <!--<a th:if="${currentPage eq pageNo + 1}" href="javascript:void(0);">-->
+                            <!--<span th:text="${pageNo + 1}"></span>-->
+                        <!--</a>-->
+                    <!--</li>-->
+                    <!--<text> &nbsp; </text>-->
+
+                    <!--<form class="form-horizontal" th:action="@{'/category/' + ${category.id} + '/page/'-->
+                    <!--+ ${currentPage + 1} + '/size/2'}"-->
+                          <!--method="post" style="display: inline; vertical-align: inherit; font-size: 20px;" >-->
+                        <!--<input th:if="${pageIndex &lt; allPages / 5  }" value="Next"-->
+                               <!--class="btn btn-default" type="submit" name="pageIndex" id="pageIndex"/>-->
+                    <!--</form>-->
+                <!--</ul>-->
+            <!--</ul>-->
+        <!--</div>-->
+
+    </div>
+
+</main>

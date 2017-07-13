@@ -1,0 +1,163 @@
+<main>
+
+    <!--<input type="button" value="GO!" onclick="doAjaxPost();" />-->
+    <div class="container body-content">
+        <div class="row">
+            <div class="col-md-12">
+                <article>
+                    <header>
+                    </header>
+
+                    <table style="width: 100%; border: solid #000009; border-width: 2px; ">
+                        <tr>
+                            <th width="15%">&nbsp;</th>
+                            <th style="text-align: center;"><h3 th:text="${article.title}"></h3></th>
+                        </tr>
+                        <tr>
+                            <td style="border: solid #000009;border-width: 1px; border-bottom-style: hidden; text-align: center">
+                                Author: <small th:text="${article.author.fullName}"></small>
+                                <br/>
+                               </td>
+                            <td  style="border: solid #000009;border-width: 1px; border-bottom-style: hidden;
+                                        text-align: right;vertical-align: top; ">
+                                <i style="font-size:11px;" >
+                                    Posted on: <text style="text-align:right;" th:text="${article.date}"></text></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border: solid #000009;border-width: 1px; border-bottom-style: hidden;
+                                vertical-align: top">
+                               <p style="text-align: center;">
+                                   <a th:href="@{/profile}">
+                                       <img th:if="${article.author.hasPicture()}" th:src="@{'data:image/jpeg;base64,'+${encodeToString}}"
+                                        width="100" height="100"/>
+                                       <img th:if="${!article.author.hasPicture()}" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                                            width="100" height="100"/>
+                                   </a>
+                               </p>
+                            </td>
+                            <td style="border: solid #000009;border-width: 1px; vertical-align: top;"><text th:text="${article.content}"> </text></td>
+                        </tr>
+                        <!--<tr>-->
+                            <!--<td style=" border: solid #000009;border-width: 1px; border-top-style: hidden;"></td>-->
+                            <!--<td>&nbsp;</td>-->
+                        <!--</tr>-->
+                        <tr>
+                            <td style="border: solid #000009;border-width: 1px; border-top-style: hidden;"></td>
+                            <td>
+                                <div>
+                                    <div class="dropdown">
+                                        <button class="btn-like"  id="likeButton" th:text="'Like ' + ${article.likesCount}"
+                                                th:attr = "data-articleId=${article.id}" style="text-decoration-color: #c8c8c8">
+                                        </button>
+                                        <!--<text class="btnss"  id="likeCount" th:text="${article.getLikesCount()}"></text>-->
+                                        <div id="myDropdown" class="dropdown-menu"></div>
+                                    </div>
+                                </div>
+                                <!--<ul class="nav navbar-nav">-->
+                                    <!--<li class="dropdown">-->
+                                        <!--<form class="form-horizontal" th:action="@{/likes/{id}(id=${article.id})}"-->
+                                              <!--method="post" style="display: inline">-->
+                                            <!--<input class="btn-lele" type="submit"-->
+                                                   <!--name="likeCounter" id="likeCounter" value="Like" onclick="doAjaxPost();"/>-->
+                                        <!--</form>-->
+                                        <!--<text class= "btn-likeCnt column-resize-line"-->
+                                              <!--th:text="${article.getLikeCounter()}" data-toggle="dropdown"-->
+                                              <!--role="button" aria-expanded="false"><span class="caret"></span></text>-->
+                                            <!--<ul class="dropdown-menu" role="menu">-->
+                                            <!--<li  th:text = "${like.user.fullName}"  th:each="like:${article.likes}"-->
+                                                 <!--th:if="${like.getLiked()}"></li>-->
+                                        <!--</ul>-->
+                                    <!--</li>-->
+                                <!--</ul>-->
+                            </td>
+                        </tr>
+                    </table>
+
+                    <text>Tags: </text><a class="btn btn-default btn-xs" th:each="tag:${article.tags}"
+                                          th:href="@{/tag/{name}(name=${tag.name})}" th:text="${tag.name}"> </a>
+                    <div class="pull-right">
+                        <th:block sec:authorize="isAuthenticated()" th:if="${user.isAdmin() OR user.isAuthor(article)}">
+                            <a class="btn btn-success btn-xs" th:href="@{/article/edit/{id}(id = ${article.id})}">Edit</a>
+                            <a class="btn btn-danger btn-xs" th:href="@{/article/delete/{id}(id = ${article.id})}">Delete</a>
+                        </th:block>
+                        <a class="btn btn-default btn-xs"
+                           th:href="@{/category/{id}/page/1/size/2 (id=${article.getCategory().getId()})}">back &raquo;</a>
+                    </div>
+
+                    <footer>
+                        <p>&nbsp;</p>
+                        <div class="form-group">
+                            <form class="form-horizontal" th:action="@{/article/details/{id}(id=${article.id})}" method="POST">
+                                <input class="form-control" type="text" id="content" placeholder="Write a comment"
+                                       name="content" required="required" />
+                                <input class="btn-comment" value="Add Comment" type="submit"/>
+                            </form>
+                        </div>
+
+
+                        <!--<h4 style="text-align: center">Comments</h4>-->
+                        <!--<div id="megaGosho" th:attr="data-articleId=${article.id}">-->
+                            <!--Comment:<br />-->
+                            <!--<textarea class="app" name='commentContent' id='commentContent'></textarea><br />-->
+                            <!--<input id="gosho" type="submit"/>-->
+                        <!--</div>-->
+                        <!--<br/>-->
+
+                        <!--<div class="container">-->
+                            <!--<div class="row" id="commentBody">-->
+                                <!--<div class="col-sm-8" th:each="i : ${#numbers.sequence( 0, 4,1)}">-->
+                                    <!--<div class="panel panel-white post panel-shadow">-->
+                                        <!--<div class="post-heading">-->
+                                            <!--<div class="pull-left image">-->
+                                            <!--</div>-->
+                                            <!--<div class="pull-left meta">-->
+                                                <!--<div class="title h5">-->
+                                                    <!--<a href="#"><b name="author">Ryan Haywood</b></a>-->
+                                                    <!--made a post.-->
+                                                <!--</div>-->
+                                                <!--<h6 class="text-muted time" th:id="'datePosted' + ${i}"></h6>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                        <!--<div class="post-description" id="postCommentContent">-->
+                                            <!--<p th:id="${i}"></p>-->
+                                            <!--<div class="stats">-->
+                                                <!--<a href="#" class="btn btn-default stat-item">-->
+                                                    <!--<i class="fa fa-thumbs-up icon"></i>2-->
+                                                <!--</a>-->
+                                                <!--<a href="#" class="btn btn-default stat-item">-->
+                                                    <!--<i class="fa fa-thumbs-down icon"></i>12-->
+                                                <!--</a>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+
+                            <!--</div>-->
+                        <!--</div>-->
+
+
+                        <div id="commentDiv"></div>
+
+                        <!--<div class="right" th:each="comment:${article.comments}">-->
+                           <!--<b><p id="commento" th:text="${comment.user.fullName} + ':'"></p></b>-->
+
+                            <!--<p id="commento" th:text="${comment.content}"></p>-->
+                            <!--<th:block sec:authorize="isAuthenticated()" th:if="${user.isAdmin() OR user.isAuthor(article) -->
+                            <!--OR user.isAuthor(comment)}">-->
+                                <!--<form style="display: inline; align-items: right">-->
+                                    <!--<input class="btn btn-danger btn-xs" value="Delete" type="submit" style="float: left"/>-->
+                                <!--</form>-->
+                            <!--</th:block>-->
+                            <!--<i><p id="commento" style="text-align: right; font-size: 12px;" th:text="${comment.date}"></p></i>-->
+
+
+                        <!--</div>-->
+                        <!--<p><i><h4 class="text" style="border: 1px solid #2ac7d2;background-color: #1C1C1C; text-decoration-color: #c8c8c8;" th:each="comment:${article.comments}" th:text="${comment.content}"></h4></i></p>-->
+
+                    </footer>
+                </article>
+            </div>
+        </div>
+    </div>
+</main>

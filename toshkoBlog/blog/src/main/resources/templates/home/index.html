@@ -1,0 +1,22 @@
+<main xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="container body-content">
+        <div class="row">
+            <div class="col-xs-4" th:each="category : ${categories}">
+                <header>
+                    <h1>
+                        <form th:action="@{/{id} (id=${category.id})}" method="post">
+                          <input style="font-size: large;" name="pageIndex" id="pageIndex" type="submit" class="btn btn-default"
+                            th:value= "${category.name + ' (' + #sets.size(category.articles) + ')'}"/>
+
+                        </form>
+                        <!--th:href="@{/category/{id}/page/1/size/2 (id=${category.id})}"-->
+
+                    </h1>
+                </header>
+            </div>
+        </div>
+    </div>
+
+
+
+</main>

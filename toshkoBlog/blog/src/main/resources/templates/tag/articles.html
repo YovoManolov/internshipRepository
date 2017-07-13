@@ -1,0 +1,41 @@
+<main>
+
+    <div class="container body-content">
+        <div class="container">
+            <div class="row">
+                <h2>Search by Tag - <th:block th:text="${tag.name}"></th:block></h2>
+                <br/>
+                <th:block th:each="article : ${tag.articles}">
+                    <article class="col-md-6">
+                        <figure class="col-lg-12" th:if="${article.articleHasPicture()}">
+                            <!--<img src="https://www.wired.com/wp-content/themes/Phoenix/assets/images/article-icon.jpg" />-->
+                            <img  th:src="@{'data:image/jpeg;base64,'+${article.getArticleImgString()}}" width="520" height="250"/>
+                            <figcaption class="article-caption"><h2>
+                                <a th:text="${article.title}" th:href="@{/article/{id}(id=${article.id})}"></a></h2>
+                                <h5 style="font-size:22px; color: #79fffd"  th:text="${article.author.fullName}"></h5>
+                            </figcaption>
+                        </figure>
+
+                        <figure class="col-lg-12" th:if="${!article.articleHasPicture()}">
+                            <img src="http://miriadna.com/desctopwalls/images/max/The-plain.jpg" width="520" height="250"/>
+                            <figcaption class="article-caption"><h2>
+                                <a th:text="${article.title}" th:href="@{/article/{id}(id=${article.id})}"></a></h2>
+                                <b> <h5 style="font-size:22px; color: #79fffd"  th:text="${article.author.fullName}"></h5></b>
+                            </figcaption>
+                        </figure>
+
+                        <div class="article-intro col-lg-12" style="padding-top: 10px;">
+                            <strong th:text="${article.summary}"></strong>
+                            <p>
+                                <a class="btn btn-default btn-xs" th:each="tag:${article.tags}"
+                                   th:href="@{/tag/{name}(name=${tag.name})}" th:text="${tag.name}"></a>
+                            </p>
+                        </div>
+
+                    </article>
+
+                </th:block>
+            </div>
+        </div>
+    </div>
+</main>
